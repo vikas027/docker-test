@@ -1,0 +1,13 @@
+---
+# https://hub.docker.com/r/vikas027/centos7-ssh-sudo
+centos7:
+  container_name: 'centos7'
+  hostname: 'centos7'
+  image: vikas027/centos7-ssh-sudo
+  ports:
+    - '2722:22'
+  environment:
+    - ROOT_PASS=Hello123
+    - TIMEZONE=Australia/Sydney
+    - SUDO_USER=vikas
+    - SUDO_USER_PASS=vikas27
