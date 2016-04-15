@@ -1,9 +1,9 @@
 ---
-# https://hub.docker.com/r/vikas027/centos7-ssh-sudo
-centos7:
-  container_name: 'centos7'
-  hostname: 'centos7'
-  image: vikas027/centos7-ssh-sudo
+# https://hub.docker.com/r/vikas027/centos-ssh-sudo
+centos6:
+  container_name: 'centos6'
+  hostname: 'centos6'
+  image: vikas027/centos-ssh-sudo
   ports:
     - '2722:22'
   environment:
