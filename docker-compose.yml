@@ -3,9 +3,9 @@
 centos7:
   container_name: 'centos7'
   hostname: 'centos7'
-  image: vikas027/centos-ssh-sudo
+  image: vikas027/centos-ssh-sudo:7
   ports:
-    - '2722:22'
+    - '2723:22'
   environment:
     - ROOT_PASS=Hello123
     - TIMEZONE=Australia/Sydney
