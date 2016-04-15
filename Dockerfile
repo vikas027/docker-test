@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:6.7
 MAINTAINER Vikas Kumar "vikas@reachvikas.com"
 
 # Upgrade
@@ -12,7 +12,7 @@ RUN rm -f /etc/localtime && \
     ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
 # Additional Repos
-RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+RUN yum -y install yum -y install http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 # Supervisord
 RUN yum -y install python-pip && \
