@@ -16,7 +16,7 @@ RUN yum -y install yum -y install http://dl.fedoraproject.org/pub/epel/6/x86_64/
 
 # Supervisord
 RUN yum -y install python-pip && \
-    pip install --upgrade pip && \
+    pip install --upgrade 'pip >= 1.4, < 1.5' && \
     pip install --upgrade supervisor supervisor-stdout && \
     mkdir -p /var/log/supervisor
 

@@ -3,7 +3,7 @@
 centos6:
   container_name: 'centos6'
   hostname: 'centos6'
-  image: vikas027/centos-ssh-sudo
+  image: vikas027/centos-ssh-sudo:6
   ports:
     - '2722:22'
   environment:
