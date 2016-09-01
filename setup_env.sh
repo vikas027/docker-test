@@ -8,8 +8,7 @@ fi
 ## Set sudo user
 if [ ! -z "${SUDO_USER}" -a ! -z "${SUDO_USER_PASS}" ]
 then
-  userdel -r appuser
-  useradd -g wheel ${SUDO_USER}
+  id ${SUDO_USER} || useradd -g wheel ${SUDO_USER}
   echo "${SUDO_USER}:${SUDO_USER_PASS}" | chpasswd
 fi
 

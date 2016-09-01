@@ -1,18 +1,18 @@
-FROM centos:7.2.1511
+FROM centos:7
 MAINTAINER Vikas Kumar "vikas@reachvikas.com"
 
 # Upgrade
-RUN yum upgrade -y
-RUN yum install -y wget tar curl tree gcc vim telnet lsof net-tools bind-utils && \
+RUN yum upgrade -y && \
+    yum install -y wget tar curl tree gcc vim telnet lsof net-tools bind-utils && \
     echo 'syntax on' >> /root/.vimrc
 
 # Set timezone
-ENV TIMEZONE Australia/Sydney
+ARG TIMEZONE=Australia/Sydney
 RUN rm -f /etc/localtime && \
     ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
 # Additional Repos
-RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
 
 # Supervisord
 RUN yum -y install python-pip && \
@@ -20,17 +20,16 @@ RUN yum -y install python-pip && \
     pip install --upgrade supervisor supervisor-stdout && \
     mkdir -p /var/log/supervisor
 
-# install crond
-RUN yum install -y cronie-noanacron
-# no PAM
-RUN cp -a /etc/pam.d/crond /etc/pam.d/crond.org
-RUN sed -i -e 's/^\(session\s\+required\s\+pam_loginuid\.so\)/#\1/' /etc/pam.d/crond
+# install crond and avoid pam
+RUN yum install -y cronie-noanacron && \
+    cp -a /etc/pam.d/crond /etc/pam.d/crond.org && \
+    sed -i -e 's/^\(session\s\+required\s\+pam_loginuid\.so\)/#\1/' /etc/pam.d/crond
 
+ARG ROOT_PASS=password27
 # Make ssh, scp work
-RUN yum install -y openssh-server openssh-clients shadow-utils
 # no PAM http://stackoverflow.com/questions/18173889/cannot-access-centos-sshd-on-docker
-ENV ROOT_PASS password
-RUN sed -i 's/UsePAM\syes/UsePAM no/' /etc/ssh/sshd_config && \
+RUN yum install -y openssh-server openssh-clients shadow-utils && \
+    sed -i 's/UsePAM\syes/UsePAM no/' /etc/ssh/sshd_config && \
     ssh-keygen -q -b 1024 -N '' -t rsa -f /etc/ssh/ssh_host_rsa_key && \
     ssh-keygen -q -b 1024 -N '' -t dsa -f /etc/ssh/ssh_host_dsa_key && \
     ssh-keygen -q -b 521 -N '' -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key && \
@@ -40,8 +39,8 @@ RUN sed -i 's/UsePAM\syes/UsePAM no/' /etc/ssh/sshd_config && \
     echo "root:${ROOT_PASS}" | chpasswd
 
 # Make sudo work
-ENV SUDO_USER appuser
-ENV SUDO_USER_PASS appuser27
+ARG SUDO_USER=appuser
+ARG SUDO_USER_PASS=appuser27
 RUN yum install sudo -y && \
     useradd -g wheel ${SUDO_USER} && \
     echo "${SUDO_USER}:${SUDO_USER_PASS}" | chpasswd && \

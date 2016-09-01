@@ -1,13 +1,24 @@
 ---
 # https://hub.docker.com/r/vikas027/centos-ssh-sudo
-centos7:
-  container_name: 'centos7'
-  hostname: 'centos7'
-  image: vikas027/centos-ssh-sudo:7
-  ports:
-    - '2723:22'
-  environment:
-    - ROOT_PASS=Hello123
-    - TIMEZONE=Australia/Sydney
-    - SUDO_USER=vikas
-    - SUDO_USER_PASS=vikas27
+
+version: '2'
+
+services:
+  centos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TIMEZONE=Australia/Sydney
+        - ROOT_PASS=password27
+        - SUDO_USER=vikas
+        - SUDO_USER_PASS=vikas27
+    image: vikas027/centos-ssh-sudo:7
+    container_name: centos
+    ports:
+      - "10022:22"
+    # This overwrites the variables built passed as arguments to build the image
+    environment:
+      - ROOT_PASS=password
+      - SUDO_USER=hello
+      - SUDO_USER_PASS=hello123
